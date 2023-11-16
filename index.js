@@ -48,7 +48,7 @@ app.post("/api/sendMail", async (req, res) => {
     var datas = {
       cid: req.body.id,
       otp: otp,
-      time : ""
+      time : req.body.time
     };
     await db
       .collection("otp")
