@@ -4,10 +4,13 @@ const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args));
 const bodyParser = require("body-parser");
 const PocketBase = require("pocketbase/cjs");
+const https = require("https");
+const fs = require("fs");
 const app = express();
-const port = process.env.PORT || 8080;
+const port =  8000;
 app.use(bodyParser.json());
 app.use(cors());
+
 const db = new PocketBase("https://edunest.org");
 const axios = require("axios");
 const token =
@@ -118,6 +121,11 @@ app.post("/api/getPayment", async (req, res) => {
   }
 });
 
-app.listen(port, () => {
+const options ={
+  key : fs.readFileSync('key.pem'),
+  cert : fs.readFileSync('cert.pem'),
+}
+const server = https.createServer(options,app);
+server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
